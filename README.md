@@ -1,4 +1,4 @@
 ansible-playbooks
 =================
 
-Private collection of ansible playbooksand roles
+Private collection of ansible playbooks and roles
