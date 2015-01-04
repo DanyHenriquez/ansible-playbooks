@@ -1,0 +1,19 @@
+haproxy_frontends:
+ - name: web-cluster-frontend
+   bind: '*:80'
+   mode: http
+   default_backend: web-cluster-backend
+haproxy_backends:
+ - name: web-cluster-backend
+   mode: http 
+   balance: roundrobin
+   servers:
+     - name: web01
+       ip: 192.168.1.91:80
+       options: check
+     - name: web02
+       ip: 192.168.1.92:80
+       options: check
+stats_user: haproxy
+stats_password: haproxy
+stats_port: 1936

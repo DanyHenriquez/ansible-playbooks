@@ -1,0 +1,19 @@
+- name: Update package cache
+  apt: update_cache=yes
+
+- name: Ensure software is at the latest version
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - sudo
+    - php5-fpm
+    - php5-mysql
+    - nginx
+
+- name: Configure NginX for php5-fpm
+  template: src=nginx.j2 dest=/etc/nginx/sites-available/default
+
+- name: Restart Nginx
+  service: name=nginx state=restarted
+
+- name: Ensure Nginx has been started
+  service: name=nginx state=started

@@ -1,0 +1,5 @@
+# No config needed for this role
+---
+- hosts: all
+  roles:
+    - dist-upgrade

@@ -1,0 +1,16 @@
+- name: Update package cache
+  apt: update_cache=yes
+
+- name: Ensure software is at the latest version
+  apt: pkg={{ item }} state=latest
+    - sudo
+    - keepalived
+
+- name: Configure keepalived
+  template: src=keepalived.j2 dest=/etc/keepalived/keepalived.conf
+
+- name: Restart keepalived
+  service: name=mysql state=restarted
+
+- name: Ensure keepalived server has been started
+  service: name=keepalived state=started

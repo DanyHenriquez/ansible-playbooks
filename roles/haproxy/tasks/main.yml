@@ -1,0 +1,20 @@
+- name: Add HaProxy repo if not present
+  apt_repository: repo='ppa:vbernat/haproxy-1.5' state=present validate_certs=no
+
+- name: Update package cache
+  apt: update_cache=yes
+
+- name: Ensure software is at the latest version
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - sudo
+    - haproxy
+
+- name: Configure HaProxy
+  template: src=haproxy.j2 dest=/etc/haproxy/haproxy.cfg
+
+- name: Restart HaProxy
+  service: name=haproxy state=restarted
+
+- name: Ensure HaProxy has been started
+  service: name=haproxy state=started

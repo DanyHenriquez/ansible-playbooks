@@ -1,0 +1,28 @@
+- name: Add key for mariaDB repo if not present
+  apt_key: id=0xcbcb082a1bb943db keyserver=keyserver.ubuntu.com state=present
+
+- name: Add the mariaDB repo if not present
+  apt_repository: repo='deb http://ams2.mirrors.digitalocean.com/mariadb/repo/5.5/ubuntu trusty main' state=present
+
+- name: Update package cache
+  apt: update_cache=yes
+
+- name: Ensure software is at the latest version
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - sudo
+    - python-mysqldb
+    - mariadb-galera-server 
+    - galera
+
+- name: Configure cluster
+  template: src=cluster.j2 dest=/etc/mysql/conf.d/cluster.cnf
+
+- name: Configure debian.cnf
+  template: src=debian.j2 dest=/etc/mysql/debian.cnf
+
+- name: Restart SQL server
+  service: name=mysql state=restarted
+
+- name: Ensure SQL server has been started
+  service: name=mysql state=started

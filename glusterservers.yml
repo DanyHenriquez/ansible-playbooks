@@ -1,0 +1,28 @@
+---
+- hosts: {{ hosts }}
+
+  tasks:
+
+  - name: Update package cache
+    apt: update_cache=yes
+
+  - name: Ensure software is at the latest version
+    apt: pkg={{ item }} state=latest
+      - glusterfs-server
+
+  - name: Gluster peer probe
+    command: /usr/sbin/gluster peer probe {{ item }}
+    with_items:
+      - '{{ play_hosts }}'
+
+  - name: make sure path exists
+    file: path={{ path }} state=directory
+
+  - name: Create mountpoint
+    shell: /usr/sbin/gluster volume create {{ brick }} replica 2 transport tcp {% for node in groups['dbservers'] %}{{ node }}:{{ path }} {% endfor %} force
+
+  - name: Make sure the glusterfs filesystem is present
+    mount: name=/usr/share/nginx/html fstype=glusterfs src={{ hostvars[inventory_hostname]['ansible_all_ipv4_addresses'][0] }}:www state=present
+
+  - name: Mount the glusterfs filesystem
+    mount: name=/usr/share/nginx/html fstype=glusterfs src={{ hostvars[inventory_hostname]['ansible_all_ipv4_addresses'][0] }}:www state=mounted

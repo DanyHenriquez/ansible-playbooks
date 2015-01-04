@@ -1,0 +1,3 @@
+role: slave
+keepalived_priority: 101
+keepalived_iface: eth0

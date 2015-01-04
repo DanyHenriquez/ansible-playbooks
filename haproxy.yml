@@ -1,0 +1,7 @@
+# The backend and frontend need to be configured for this role.
+# Please see roles/haproxy/vars/main.yml for a example
+---
+- hosts: haproxy
+  serial: 1
+  roles:
+    - haproxy
