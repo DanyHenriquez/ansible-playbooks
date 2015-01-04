@@ -1,4 +1,3 @@
-# No special configuration needed
 ---
 - hosts: webservers
   serial: 1
