@@ -1,0 +1,14 @@
+- name: Purge Rsyslog config
+  file: path=/etc/rsyslog.d state=absent
+
+- name: Create Rsyslog directory
+  file: path=/etc/rsyslog.d state=directory
+
+- name: Configure Rsyslog
+  template: src=10-rsyslog-config.conf.j2 dest=/etc/rsyslog.d/10-rsyslog-config.conf
+
+- name: Restart Rsyslog
+  service: name=rsyslog state=restarted
+
+- name: Ensure Rsyslog has been started
+  service: name=rsyslog state=started
