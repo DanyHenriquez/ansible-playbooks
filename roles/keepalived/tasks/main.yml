@@ -3,6 +3,7 @@
 
 - name: Ensure software is at the latest version
   apt: pkg={{ item }} state=latest
+  with_items:
     - sudo
     - keepalived
 

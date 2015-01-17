@@ -1,3 +1,12 @@
+- name: Update package cache
+  apt: update_cache=yes
+
+- name: Ensure software is at the latest version
+  apt: pkg={{ item }} state=latest
+  with_items:
+    - ntp
+    - rsyslog
+
 - name: Purge Rsyslog config
   file: path=/etc/rsyslog.d state=absent
 
@@ -5,7 +14,16 @@
   file: path=/etc/rsyslog.d state=directory
 
 - name: Configure Rsyslog
-  template: src=10-rsyslog-config.conf.j2 dest=/etc/rsyslog.d/10-rsyslog-config.conf
+  template: src=rsyslog.j2 dest=/etc/rsyslog.conf
+
+- name: Configure Logrotate
+  template: src=rsyslog.logrotate.j2 dest=/etc/logrotate.d/rsyslog
+
+- name: Restart ntp
+  service: name=ntp state=restarted
+
+- name: Ensure ntp has been started
+  service: name=ntp state=started
 
 - name: Restart Rsyslog
   service: name=rsyslog state=restarted
