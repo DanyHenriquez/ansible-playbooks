@@ -16,4 +16,4 @@ haproxy_backends:
        options: check
 stats_user: haproxy
 stats_password: haproxy
-stats_port: 1936
+stats_port: 8080
