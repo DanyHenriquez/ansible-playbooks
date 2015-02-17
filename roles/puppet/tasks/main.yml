@@ -1,16 +1,11 @@
----
-- hosts: servers
-  serial: 1
-  tasks: 
+- name: Install latest puppet agent from puppetlabs repo
+  yum: name=http://yum.puppetlabs.com/puppetlabs-release-el-7.noarch.rpmstate=present
 
-  - name: Install latest puppet agent from puppetlabs repo
-    yum: name=http://yum.puppetlabs.com/puppetlabs-release-el-7.noarch.rpmstate=present
+- name: Remove kickstart user 
+  user: name=kickstart state=absent remove=yes
 
-  - name: Remove kickstart user 
-    user: name=kickstart state=absent remove=yes
+- name: Restart puppet agent
+  service: name=puppet state=restarted
 
-  - name: Restart puppet agent
-    service: name=puppet state=restarted
-
-  - name: Ensure puppet agent has been started
-    service: name=puppet state=started
+- name: Ensure puppet agent has been started
+  service: name=puppet state=started
